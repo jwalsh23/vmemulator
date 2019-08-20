@@ -2,9 +2,10 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
+
+	"github.com/vmemulator/parser"
 )
 
 func main() {
@@ -14,11 +15,12 @@ func main() {
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+	reader := bufio.NewReader(file)
+	p := parser.Parser{
+		Reader: reader,
 	}
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+	for p.HasMoreCommands() {
+		p.Advance()
+		p.PrintCurrent()
 	}
 }
