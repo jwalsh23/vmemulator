@@ -11,9 +11,9 @@ import (
 // Parser struct
 type Parser struct {
 	Reader         *bufio.Reader
-	currentCommand command
+	currentCommand Command
 }
-type command struct {
+type Command struct {
 	commandType string
 	arg1        string
 	arg2        int
@@ -93,10 +93,10 @@ func removeComment(line string) string {
 	return strings.TrimRight(lineSlc[0], " ")
 }
 
-func parseCommand(commandString string) command {
+func parseCommand(commandString string) Command {
 	commandSlc := strings.Split(commandString, " ")
 	if len(commandSlc) == 1 {
-		return command{
+		return Command{
 			commandType: commandMap[commandSlc[0]],
 			arg1:        commandSlc[0],
 		}
@@ -106,11 +106,11 @@ func parseCommand(commandString string) command {
 		if err != nil {
 			log.Fatal(err)
 		}
-		return command{
+		return Command{
 			commandType: commandMap[commandSlc[0]],
 			arg1:        commandSlc[1],
 			arg2:        arg2,
 		}
 	}
-	return command{}
+	return Command{}
 }
