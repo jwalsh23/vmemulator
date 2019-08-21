@@ -12,6 +12,14 @@ type codeWriter struct {
 	fileBuffer *bytes.Buffer
 }
 
+var arithmeticCommandMap = map[string]string{
+	"add": addCommand,
+	"sub": subCommand,
+	"neg": negCommand,
+	"eq":  eqCommand,
+	"lt":  ltCommand,
+}
+
 func New() *codeWriter {
 	return &codeWriter{
 		fileBuffer: new(bytes.Buffer),
@@ -23,7 +31,8 @@ func (c *codeWriter) SetFileName(name string) {
 }
 
 func (c *codeWriter) WriteArithmetic(cmd string) {
-	c.fileBuffer.WriteString("here is a test\n")
+	c.fileBuffer.WriteString(arithmeticCommandMap[cmd])
+	c.fileBuffer.WriteString("\n")
 }
 func (c *codeWriter) WritePushPop(cmd, segment string, index int) {
 
@@ -38,3 +47,54 @@ func (c *codeWriter) Close() {
 		log.Fatal(err)
 	}
 }
+
+const (
+	addCommand = `@SP
+AM=M-1
+D=M
+A=A-1
+M=M+D`
+	subCommand = `@SP
+AM=M-1
+D=M
+A=A-1
+M=M-D`
+	negCommand = `@SP
+A=A-1
+M=-M`
+	eqCommand = `@SP
+AM=M-1
+D=-M
+A=A-1
+M=M+D
+@TRUE
+M;JE
+@FALSE
+0;JMP`
+	ltCommand = `@SP
+AM=M-1
+D=-M
+A=A-1
+M=M+D
+@FALSE
+M;JGE
+@TRUE
+0;JMP`
+	gtCommand = `@SP
+AM=M-1
+D=-M
+A=A-1
+M=M+D
+@FALSE
+M;LTE
+@TRUE
+0;JMP`
+	andCommand = `AM=M-1
+D=M 
+A=A-1
+M=M&D`
+	orCommand = `AM=M-1
+D=M 
+A=A-1
+M=M&D`
+)

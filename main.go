@@ -23,14 +23,15 @@ func main() {
 	p := parser.Parser{
 		Reader: reader,
 	}
+	codeWriter := codewriter.New()
 	for p.HasMoreCommands() {
 		p.Advance()
-		p.PrintCurrent()
+		if p.CommandType() == parser.C_ARITHMETIC {
+			codeWriter.WriteArithmetic(p.Arg1())
+			continue
+		}
+		codeWriter.WritePushPop(p.CommandType(), p.Arg1(), p.Arg2())
 	}
-	codeWriter := codewriter.New()
-	codeWriter.SetFileName(os.Args[2])
-	for i := 0; i < 5; i++ {
-		codeWriter.WriteArithmetic("")
-	}
+	// codeWriter.SetFileName(os.Args[2])
 	codeWriter.Close()
 }

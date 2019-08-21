@@ -87,6 +87,9 @@ func (p *Parser) Arg1() string {
 func (p *Parser) Arg2() int {
 	return p.currentCommand.arg2
 }
+func (p *Parser) CommandType() string {
+	return p.currentCommand.commandType
+}
 
 func removeComment(line string) string {
 	lineSlc := strings.Split(line, "//")
@@ -99,6 +102,7 @@ func parseCommand(commandString string) Command {
 		return Command{
 			commandType: commandMap[commandSlc[0]],
 			arg1:        commandSlc[0],
+			arg2:        -1,
 		}
 	}
 	if len(commandSlc) == 3 {
