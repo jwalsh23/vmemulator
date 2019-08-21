@@ -1,0 +1,177 @@
+
+
+// Longer add
+@SP
+M=M-1 // SP now points to one value less
+A = M
+D=M
+A=A-1
+M=M+D
+
+
+//Thiers Add. 258
+@SP // Ram[0] = 258
+AM=M-1  // A = 257, RAM[0]=257
+D=M // D = RAM[257]
+A=A-1 // A = 256
+M=M+D // RAM[256] = RAM[256] + RAM[257]
+
+// Subtract
+
+@SP
+AM=M-1 // A=RAM[257] RAM[0] = 257
+D=M // D =7
+A=A-1
+M=M-D
+
+// Negative
+
+@SP
+A=A-1
+M=-M
+
+// Equal
+
+@SP
+AM=M-1
+D=-M
+A=A-1
+M=M+D
+@TRUE
+M;JE
+@FALSE
+0;JMP
+
+// Less Than
+
+@SP
+AM=M-1
+D=-M
+A=A-1
+M=M+D
+@FALSE
+M;JGE
+@TRUE
+0;JMP
+
+// Greater Than
+
+@SP
+AM=M-1
+D=-M
+A=A-1
+M=M+D // M + -D
+@FALSE
+M;LTE
+@TRUE
+0;JMP
+
+// And
+
+AM=M-1 // A=RAM[257] RAM[0] = 257
+D=M 
+A=A-1
+M=M&D
+
+// Or
+
+AM=M-1 // A=RAM[257] RAM[0] = 257
+D=M 
+A=A-1
+M=M&D
+
+// Not
+@SP
+A=A-1
+M=!M
+
+// RAM[0] = 257
+// Push constant 17
+@17
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// Long Push constant
+@17
+D=A // D = 17
+@CONSTANT
+A=A+D
+D=M
+@SP // RAM[0]
+A=M// A = 257
+M=D // RAM[257] = 17
+@SP // RAM[0]
+M=M+1 // RAM[0]= RAM[0] + 1 // 258
+
+
+// Push local/argument/this/that
+
+//Input number = 5
+@INPUTNUMBER
+D=A // D=5
+@LCL //
+A=A+D
+D=M // D = RAM[LCL +5]
+@SP // Populate and increment SP
+A=M
+M=D
+@SP
+M=M+1
+
+// Pop into local/argument/this/that
+@INPUTNUMBER
+D=A
+@LCL
+D=A+D
+@R13
+M=D
+
+@SP
+AM=M-1
+D=M
+@R13
+A=M
+M=D
+
+//push  static 5 // temp is same but starts at address 5
+// 16+5 = 21
+@21
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// pop static 5 // temp is same but starts at address 5
+@SP
+AM=M-1
+D=M
+@21
+M=D
+
+push pointer 0 - this
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+pop pointer 0 - this
+@THIS
+D=A
+@R13
+M=D
+
+@SP
+AM=M-1
+D=M
+@R13
+A=M
+M=D
