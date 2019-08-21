@@ -1,3 +1,8 @@
-push local 1
+// Here is a comment
+
+push local 1 // Here is another comment
 push static 2
 pop local 2
+add
+sub
+// another comment
